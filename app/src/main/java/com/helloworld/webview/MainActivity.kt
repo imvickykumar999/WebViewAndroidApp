@@ -1,13 +1,12 @@
 package com.helloworld.webview
 
 import android.os.Bundle
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,29 +18,31 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WebViewTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                WebViewScreen(url = "https://blogforge.pythonanywhere.com")
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
+fun WebViewScreen(url: String) {
+    // AndroidView is used to integrate traditional Android Views in a Composable.
+    androidx.compose.ui.viewinterop.AndroidView(
+        factory = { context ->
+            WebView(context).apply {
+                webViewClient = WebViewClient() // Ensures links open in the WebView itself
+                settings.javaScriptEnabled = true // Enable JavaScript if needed
+                loadUrl(url)
+            }
+        },
+        modifier = Modifier.fillMaxSize()
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun WebViewScreenPreview() {
     WebViewTheme {
-        Greeting("Android")
+        WebViewScreen(url = "https://logforge.pythonanywhere.com")
     }
 }
