@@ -5,7 +5,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,11 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import com.helloworld.webview.ui.theme.WebViewTheme
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowInsetsControllerCompat
 
 class MainActivity : ComponentActivity() {
 
@@ -26,9 +22,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Enable edge-to-edge mode
+        // Enable edge-to-edge layout
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        // Set the status bar color to navy blue
+        window.statusBarColor = android.graphics.Color.parseColor("#031f3d")  // Navy blue hex code
+
+        // Optionally, control status bar icons for light/dark content
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.isAppearanceLightStatusBars = false  // Set to true if the background is light
+
+        // Set the content to be shown
         setContent {
             WebViewTheme {
                 WebViewScreen(url = "https://blogforge.pythonanywhere.com")
