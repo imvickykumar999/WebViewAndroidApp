@@ -10,7 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.WindowCompat
 import com.helloworld.webview.ui.theme.WebViewTheme
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
 
@@ -18,7 +25,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // Enable edge-to-edge mode
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             WebViewTheme {
                 WebViewScreen(url = "https://blogforge.pythonanywhere.com")
@@ -37,7 +47,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun WebViewScreen(url: String) {
         // AndroidView is used to integrate traditional Android Views in a Composable.
-        androidx.compose.ui.viewinterop.AndroidView(
+        AndroidView(
             factory = { context ->
                 WebView(context).apply {
                     webViewClient = WebViewClient() // Ensures links open in the WebView itself
@@ -46,7 +56,9 @@ class MainActivity : ComponentActivity() {
                     webView = this  // Initialize the WebView reference
                 }
             },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding() // Applies padding based on the status and navigation bars
         )
     }
 
